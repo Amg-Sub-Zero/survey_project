@@ -12,6 +12,7 @@ import Users from "./pages/Users";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Unauthorized from "./pages/Unauthorized";
+import Profile from "./pages/Profile";
 
 // Redirects to login if not authenticated
 function RequireAuth({ children }) {
@@ -46,6 +47,7 @@ function AppRoutes() {
                 <Route path="/customers" element={<RequireRole page="customers"><Customers /></RequireRole>} />
                 <Route path="/reports" element={<RequireRole page="reports"><Reports /></RequireRole>} />
                 <Route path="/users" element={<RequireRole page="users"><Users /></RequireRole>} />
+                <Route path="/profile" element={<Profile />} />
               </Routes>
             </Layout>
           </RequireAuth>

@@ -1,7 +1,7 @@
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard, ShoppingCart, Package, Warehouse,
-  Users, BarChart2, Store, LogOut, Sun, Moon, UserCog, Shield
+  Users, BarChart2, Store, LogOut, Sun, Moon, UserCog, ChevronRight
 } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
 import { useAuth, canAccess } from "../context/AuthContext";
@@ -19,7 +19,7 @@ const allNavItems = [
 const pageTitles = {
   "/": "Dashboard", "/pos": "Point of Sale", "/products": "Product Management",
   "/inventory": "Inventory", "/customers": "Customers",
-  "/reports": "Reports", "/users": "User Management",
+  "/reports": "Reports", "/users": "User Management", "/profile": "My Profile",
 };
 
 const roleBadge = {
@@ -64,8 +64,17 @@ export default function Layout({ children }) {
           ))}
         </nav>
 
-        {/* User info at bottom of sidebar */}
-        <div style={{ padding: "16px 20px", borderTop: "1px solid rgba(255,255,255,0.1)" }}>
+        {/* User info at bottom of sidebar — click to go to profile */}
+        <div
+          onClick={() => navigate("/profile")}
+          style={{
+            padding: "16px 20px", borderTop: "1px solid rgba(255,255,255,0.1)",
+            cursor: "pointer", transition: "background 0.2s",
+          }}
+          onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.07)"}
+          onMouseLeave={e => e.currentTarget.style.background = "transparent"}
+          title="View profile"
+        >
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <div style={{
               width: 34, height: 34, borderRadius: "50%", background: badge.bg,
@@ -74,7 +83,7 @@ export default function Layout({ children }) {
             }}>
               {(user?.name || "U").charAt(0).toUpperCase()}
             </div>
-            <div style={{ overflow: "hidden" }}>
+            <div style={{ overflow: "hidden", flex: 1 }}>
               <div style={{ fontSize: "0.82rem", fontWeight: 600, color: "#fff", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                 {user?.name}
               </div>
@@ -82,6 +91,7 @@ export default function Layout({ children }) {
                 {badge.label}
               </span>
             </div>
+            <ChevronRight size={14} color="rgba(255,255,255,0.3)" />
           </div>
         </div>
       </aside>
@@ -93,12 +103,6 @@ export default function Layout({ children }) {
             <button className="theme-toggle" onClick={toggle} title="Toggle theme">
               {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
             </button>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "5px 12px", borderRadius: 8, background: badge.bg }}>
-              <Shield size={13} color={badge.color} />
-              <span style={{ fontSize: "0.8rem", fontWeight: 700, color: badge.color, textTransform: "capitalize" }}>
-                {user?.role}
-              </span>
-            </div>
             <button onClick={handleLogout} className="btn btn-outline btn-sm">
               <LogOut size={14} /> Logout
             </button>
