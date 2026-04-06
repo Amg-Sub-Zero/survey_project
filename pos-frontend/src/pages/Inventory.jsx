@@ -24,8 +24,8 @@ export default function Inventory() {
     <div>
       <div className="grid-3" style={{ marginBottom: 24 }}>
         <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setFilter("ok")}>
-          <div className="stat-icon" style={{ background: "#d1fae5" }}>
-            <CheckCircle size={22} color="#10b981" />
+          <div className="stat-icon" style={{ background: "#e6f2ef" }}>
+            <CheckCircle size={22} color="#4a7c6f" />
           </div>
           <div className="stat-info">
             <h3>{inStock}</h3>
@@ -33,8 +33,8 @@ export default function Inventory() {
           </div>
         </div>
         <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setFilter("low")}>
-          <div className="stat-icon" style={{ background: "#fef3c7" }}>
-            <AlertTriangle size={22} color="#f59e0b" />
+          <div className="stat-icon" style={{ background: "#f5ede0" }}>
+            <AlertTriangle size={22} color="#b07d3a" />
           </div>
           <div className="stat-info">
             <h3>{lowStock}</h3>
@@ -42,8 +42,8 @@ export default function Inventory() {
           </div>
         </div>
         <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => setFilter("out")}>
-          <div className="stat-icon" style={{ background: "#fee2e2" }}>
-            <XCircle size={22} color="#ef4444" />
+          <div className="stat-icon" style={{ background: "#faeaea" }}>
+            <XCircle size={22} color="#c0392b" />
           </div>
           <div className="stat-info">
             <h3>{outOfStock}</h3>
@@ -85,7 +85,7 @@ export default function Inventory() {
             <tbody>
               {filtered.map(p => {
                 const pct = Math.min((p.quantity / MAX_STOCK) * 100, 100);
-                const color = p.quantity === 0 ? "#ef4444" : p.quantity <= 10 ? "#f59e0b" : "#10b981";
+                const color = p.quantity === 0 ? "#c0392b" : p.quantity <= 10 ? "#b07d3a" : "#4a7c6f";
                 return (
                   <tr key={p.id}>
                     <td style={{ fontWeight: 600 }}>{p.name}</td>

@@ -2,13 +2,13 @@ import { TrendingUp, ShoppingBag, Users, Package, AlertTriangle } from "lucide-r
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from "recharts";
 import { salesData, categoryData, recentSales, products } from "../data/dummyData";
 
-const COLORS = ["#4f46e5", "#06b6d4", "#10b981", "#f59e0b", "#ef4444"];
+const COLORS = ["#4a5568", "#4a7c6f", "#4a7a8a", "#7a6a3a", "#8a5a5a"];
 
 const stats = [
-  { label: "Today's Sales", value: "$820.00", icon: TrendingUp, color: "#4f46e5", bg: "#ede9fe" },
-  { label: "Orders Today", value: "34", icon: ShoppingBag, color: "#10b981", bg: "#d1fae5" },
-  { label: "Customers", value: "4", icon: Users, color: "#06b6d4", bg: "#cffafe" },
-  { label: "Products", value: products.length, icon: Package, color: "#f59e0b", bg: "#fef3c7" },
+  { label: "Today's Sales", value: "$820.00", icon: TrendingUp, color: "#4a5568", bg: "#edf0f5" },
+  { label: "Orders Today",  value: "34",      icon: ShoppingBag, color: "#4a7c6f", bg: "#e6f2ef" },
+  { label: "Customers",     value: "4",       icon: Users,       color: "#4a7a8a", bg: "#e6f0f5" },
+  { label: "Products",      value: products.length, icon: Package, color: "#7a6a3a", bg: "#f5ede0" },
 ];
 
 const lowStock = products.filter(p => p.quantity <= 8);
@@ -39,7 +39,7 @@ export default function Dashboard() {
                 <XAxis dataKey="day" tick={{ fontSize: 12 }} />
                 <YAxis tick={{ fontSize: 12 }} />
                 <Tooltip formatter={(v) => `$${v}`} />
-                <Bar dataKey="sales" fill="#4f46e5" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="sales" fill="#4a5568" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -104,7 +104,7 @@ export default function Dashboard() {
               <div className="stock-bar">
                 <div className="stock-bar-fill" style={{
                   width: `${Math.min((p.quantity / 20) * 100, 100)}%`,
-                  background: p.quantity === 0 ? "#ef4444" : "#f59e0b"
+                  background: p.quantity === 0 ? "#c0392b" : "#b07d3a"
                 }} />
               </div>
             </div>

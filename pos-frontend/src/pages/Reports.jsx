@@ -5,7 +5,7 @@ import {
 } from "recharts";
 import { salesData, categoryData, recentSales, products } from "../data/dummyData";
 
-const COLORS = ["#4f46e5", "#06b6d4", "#10b981", "#f59e0b", "#ef4444"];
+const COLORS = ["#4a5568", "#4a7c6f", "#4a7a8a", "#7a6a3a", "#8a5a5a"];
 
 const weeklyLine = [
   { week: "W1", revenue: 1820, orders: 42 },
@@ -24,10 +24,10 @@ export default function Reports() {
     <div>
       <div className="grid-4" style={{ marginBottom: 24 }}>
         {[
-          { label: "Daily Revenue", value: "$820", icon: DollarSign, color: "#4f46e5", bg: "#ede9fe" },
-          { label: "Weekly Revenue", value: "$3,440", icon: TrendingUp, color: "#10b981", bg: "#d1fae5" },
-          { label: "Total Orders", value: "218", icon: ShoppingBag, color: "#06b6d4", bg: "#cffafe" },
-          { label: "Avg Order Value", value: "$15.78", icon: Users, color: "#f59e0b", bg: "#fef3c7" },
+          { label: "Daily Revenue",  value: "$820",   icon: DollarSign, color: "#4a5568", bg: "#edf0f5" },
+          { label: "Weekly Revenue", value: "$3,440", icon: TrendingUp,  color: "#4a7c6f", bg: "#e6f2ef" },
+          { label: "Total Orders",   value: "218",    icon: ShoppingBag, color: "#4a7a8a", bg: "#e6f0f5" },
+          { label: "Avg Order Value",value: "$15.78", icon: Users,       color: "#7a6a3a", bg: "#f5ede0" },
         ].map(({ label, value, icon: Icon, color, bg }) => (
           <div className="stat-card" key={label}>
             <div className="stat-icon" style={{ background: bg }}>
@@ -51,7 +51,7 @@ export default function Reports() {
                 <XAxis dataKey="day" tick={{ fontSize: 12 }} />
                 <YAxis tick={{ fontSize: 12 }} />
                 <Tooltip formatter={v => `$${v}`} />
-                <Bar dataKey="sales" fill="#4f46e5" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="sales" fill="#4a5568" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -66,7 +66,7 @@ export default function Reports() {
                 <XAxis dataKey="week" tick={{ fontSize: 12 }} />
                 <YAxis tick={{ fontSize: 12 }} />
                 <Tooltip formatter={v => `$${v}`} />
-                <Line type="monotone" dataKey="revenue" stroke="#4f46e5" strokeWidth={2} dot={{ r: 4 }} />
+                <Line type="monotone" dataKey="revenue" stroke="#4a7c6f" strokeWidth={2} dot={{ r: 4 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -82,7 +82,7 @@ export default function Reports() {
                 <XAxis type="number" tick={{ fontSize: 12 }} />
                 <YAxis dataKey="name" type="category" tick={{ fontSize: 12 }} width={70} />
                 <Tooltip />
-                <Bar dataKey="sold" fill="#06b6d4" radius={[0, 6, 6, 0]} />
+                <Bar dataKey="sold" fill="#4a7a8a" radius={[0, 6, 6, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

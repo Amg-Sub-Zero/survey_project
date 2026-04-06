@@ -1,35 +1,45 @@
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard, ShoppingCart, Package, Warehouse,
-  Users, BarChart2, Store, LogOut
+  Users, BarChart2, Store, LogOut, Sun, Moon, UserCog, Shield
 } from "lucide-react";
+import { useTheme } from "../context/ThemeContext";
+import { useAuth, canAccess } from "../context/AuthContext";
 
-const navItems = [
-  { path: "/", label: "Dashboard", icon: LayoutDashboard },
-  { path: "/pos", label: "Sales / POS", icon: ShoppingCart },
-  { path: "/products", label: "Products", icon: Package },
-  { path: "/inventory", label: "Inventory", icon: Warehouse },
-  { path: "/customers", label: "Customers", icon: Users },
-  { path: "/reports", label: "Reports", icon: BarChart2 },
+const allNavItems = [
+  { path: "/",          label: "Dashboard", icon: LayoutDashboard, page: "dashboard" },
+  { path: "/pos",       label: "Sales / POS", icon: ShoppingCart,  page: "pos"       },
+  { path: "/products",  label: "Products",    icon: Package,        page: "products"  },
+  { path: "/inventory", label: "Inventory",   icon: Warehouse,      page: "inventory" },
+  { path: "/customers", label: "Customers",   icon: Users,          page: "customers" },
+  { path: "/reports",   label: "Reports",     icon: BarChart2,      page: "reports"   },
+  { path: "/users",     label: "Users",       icon: UserCog,        page: "users"     },
 ];
 
 const pageTitles = {
-  "/": "Dashboard",
-  "/pos": "Point of Sale",
-  "/products": "Product Management",
-  "/inventory": "Inventory",
-  "/customers": "Customers",
-  "/reports": "Reports",
+  "/": "Dashboard", "/pos": "Point of Sale", "/products": "Product Management",
+  "/inventory": "Inventory", "/customers": "Customers",
+  "/reports": "Reports", "/users": "User Management",
+};
+
+const roleBadge = {
+  admin:   { label: "Admin",   bg: "#edf0f5", color: "#4a5568" },
+  manager: { label: "Manager", bg: "#e6f0ee", color: "#3a6b5f" },
+  cashier: { label: "Cashier", bg: "#e8edf5", color: "#3a5278" },
 };
 
 export default function Layout({ children }) {
   const location = useLocation();
   const navigate = useNavigate();
+  const { theme, toggle } = useTheme();
+  const { user, logout } = useAuth();
   const title = pageTitles[location.pathname] || "POS System";
-  const user = JSON.parse(localStorage.getItem("pos_user") || "{}");
+
+  const navItems = allNavItems.filter(item => canAccess(user?.role, item.page));
+  const badge = roleBadge[user?.role] || roleBadge.cashier;
 
   const handleLogout = () => {
-    localStorage.removeItem("pos_user");
+    logout();
     navigate("/login");
   };
 
@@ -53,27 +63,43 @@ export default function Layout({ children }) {
             </NavLink>
           ))}
         </nav>
+
+        {/* User info at bottom of sidebar */}
+        <div style={{ padding: "16px 20px", borderTop: "1px solid rgba(255,255,255,0.1)" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div style={{
+              width: 34, height: 34, borderRadius: "50%", background: badge.bg,
+              color: badge.color, display: "flex", alignItems: "center",
+              justifyContent: "center", fontWeight: 700, fontSize: "0.85rem", flexShrink: 0
+            }}>
+              {(user?.name || "U").charAt(0).toUpperCase()}
+            </div>
+            <div style={{ overflow: "hidden" }}>
+              <div style={{ fontSize: "0.82rem", fontWeight: 600, color: "#fff", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                {user?.name}
+              </div>
+              <span style={{ fontSize: "0.72rem", padding: "1px 8px", borderRadius: 10, background: badge.bg, color: badge.color, fontWeight: 700, textTransform: "capitalize" }}>
+                {badge.label}
+              </span>
+            </div>
+          </div>
+        </div>
       </aside>
 
       <div className="main-content">
         <header className="topbar">
           <span className="topbar-title">{title}</span>
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <span style={{ fontSize: "0.85rem", color: "#6b7280" }}>
-              Mon, Apr 6, 2026
-            </span>
-            <div style={{
-              width: 34, height: 34, borderRadius: "50%",
-              background: "#4f46e5", color: "#fff",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontWeight: 700, fontSize: "0.85rem"
-            }}>{(user.name || "A").charAt(0).toUpperCase()}</div>
-            <span style={{ fontSize: "0.875rem", fontWeight: 500 }}>{user.name || "Admin"}</span>
-            <button
-              onClick={handleLogout}
-              className="btn btn-outline btn-sm"
-              style={{ display: "flex", alignItems: "center", gap: 5 }}
-            >
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <button className="theme-toggle" onClick={toggle} title="Toggle theme">
+              {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+            </button>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "5px 12px", borderRadius: 8, background: badge.bg }}>
+              <Shield size={13} color={badge.color} />
+              <span style={{ fontSize: "0.8rem", fontWeight: 700, color: badge.color, textTransform: "capitalize" }}>
+                {user?.role}
+              </span>
+            </div>
+            <button onClick={handleLogout} className="btn btn-outline btn-sm">
               <LogOut size={14} /> Logout
             </button>
           </div>

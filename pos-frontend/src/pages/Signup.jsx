@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Store, Eye, EyeOff, Lock, Mail, User, Building2 } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 export default function Signup() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ name: "", storeName: "", email: "", password: "", confirm: "" });
+  const { login } = useAuth();
+  const [form, setForm] = useState({ name: "", storeName: "", email: "", password: "", confirm: "", role: "cashier" });
   const [showPass, setShowPass] = useState(false);
   const [error, setError] = useState("");
 
@@ -13,8 +15,11 @@ export default function Signup() {
     if (!form.name || !form.email || !form.password) { setError("Please fill in all required fields."); return; }
     if (form.password.length < 6) { setError("Password must be at least 6 characters."); return; }
     if (form.password !== form.confirm) { setError("Passwords do not match."); return; }
-    localStorage.setItem("pos_user", JSON.stringify({ email: form.email, name: form.name, storeName: form.storeName }));
-    navigate("/");
+    // Save and auto-login
+    const newUser = { id: Date.now(), name: form.name, email: form.email, role: form.role, storeName: form.storeName };
+    localStorage.setItem("pos_user", JSON.stringify(newUser));
+    const roleHome = { admin: "/", manager: "/pos", cashier: "/pos" };
+    navigate(roleHome[form.role] || "/pos");
   };
 
   return (
@@ -88,6 +93,15 @@ export default function Signup() {
               </div>
             </div>
           </div>
+
+          <div className="form-group">
+              <label className="form-label">Role</label>
+              <select className="input" value={form.role} onChange={e => setForm({ ...form, role: e.target.value })}>
+                <option value="cashier">Cashier — POS only</option>
+                <option value="manager">Manager — Products & Reports</option>
+                <option value="admin">Administrator — Full access</option>
+              </select>
+            </div>
 
           <button type="submit" className="btn btn-primary btn-lg btn-block" style={{ marginTop: 8 }}>
             Create Account
